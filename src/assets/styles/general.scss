@@ -1,0 +1,29 @@
+// Node Modules
+@import "~bootstrap/scss/bootstrap.scss"; // così si importa un file dai node modules
+
+//Font
+@import "~@fontsource/montserrat/index.css";
+@import "~@fontsource/montserrat/700.css";
+
+//Styles
+@import "./variables.scss";
+
+body {
+  font-family: $main-font;
+  color: $text-color;
+  background-image: linear-gradient(
+      to left,
+      transparent 0px,
+      transparent 20px,
+      rgba(#000, 0.02) 20px,
+      rgba(#000, 0.02) 40px
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 20px,
+      rgba(#000, 0.02) 20px,
+      rgba(#000, 0.02) 40px
+    );
+  background-size: 40px, 100% 40px;
+}
