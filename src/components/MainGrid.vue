@@ -1,5 +1,6 @@
 <template>
   <section class="container d-flex flex-wrap gap-5 justify-content-center">
+    <search-bar @search="setSearchText($event)" :characterSpecies="species" />
     <app-loader v-if="loading" />
     <!-- <div -->
     <!-- class="text-center" -->
@@ -18,14 +19,14 @@
     <!-- </div> -->
     <div class="row">
       <div
-        v-for="character in characterList"
+        v-for="character in filteredList"
         :key="character.id"
         class="col-6 col-md-4 col-lg-3 my-3"
       >
         <app-card :item="character" />
       </div>
     </div>
-    <app-footer v-if="!loading" :len="characterList.length" />
+    <app-footer v-if="!loading" :len="filteredList.length" />
   </section>
 </template>
     
@@ -34,19 +35,38 @@ import AppLoader from "./AppLoader.vue";
 import axios from "axios";
 import AppCard from "./AppCard.vue";
 import AppFooter from "./AppFooter.vue";
+import SearchBar from "./SearchBar.vue";
 export default {
   name: "MainGrid",
   components: {
     AppLoader,
     AppCard,
     AppFooter,
+    SearchBar,
   },
   data() {
     return {
       characterList: [],
+      searchText: "",
       apiPath: "https://api.sampleapis.com/rickandmorty/",
       loading: false,
+      species: [],
     };
+  },
+  methods: {
+    setSearchText(text) {
+      this.searchText = text;
+    },
+  },
+  computed: {
+    filteredList() {
+      if (this.searchText === "") {
+        return this.characterList;
+      }
+      return this.characterList.filter((el) => {
+        return el.species === this.searchText;
+      });
+    },
   },
   mounted() {
     this.loading = true;
@@ -55,6 +75,11 @@ export default {
       .then((res) => {
         // console.log(res);
         this.characterList = res.data;
+        this.characterList.forEach((el) => {
+          if (!this.species.includes(el.species)) {
+            this.species.push(el.species);
+          }
+        });
         console.log(this.characterList);
         this.loading = false;
       })
